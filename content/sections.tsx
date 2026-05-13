@@ -6,6 +6,7 @@ import { StuckPanel, StuckItem } from "@/components/StuckPanel";
 import { Illustration } from "@/components/Illustration";
 import { PlanPicker } from "@/components/PlanPicker";
 import { SectionMeta } from "@/components/Sidebar";
+import { OSOnly } from "@/components/OSOnly";
 
 export const sectionsMeta: SectionMeta[] = [
   { id: "what-is-this", number: 1, title: "What is this?" },
@@ -54,6 +55,14 @@ export function AllSections() {
           </Jargon>
           , and have no idea what a &quot;repo&quot; is. That&apos;s perfect — let&apos;s go.
         </p>
+
+        <div className="mt-4 p-4 rounded-lg bg-accent/5 border border-accent/20">
+          <p className="text-sm">
+            <strong>💡 Heads up:</strong> This tutorial adapts to your operating system. Use the
+            <strong> Mac / Windows / Linux </strong>
+            toggle in the top-right corner to switch — every command and instruction will update automatically.
+          </p>
+        </div>
       </Section>
 
       {/* Section 2 */}
@@ -68,28 +77,65 @@ export function AllSections() {
         </p>
 
         <h3 className="font-semibold text-lg mt-6 mb-2">How to open it</h3>
-        <CommandBlock
-          title="Mac"
-          command={{ mac: "Press Cmd+Space, type 'Terminal', press Enter" }}
-        />
-        <CommandBlock
-          title="Windows"
-          command={{ windows: "Press Win key, type 'Terminal' or 'PowerShell', press Enter" }}
-        />
-        <CommandBlock
-          title="Linux"
-          command={{ linux: "Press Ctrl+Alt+T" }}
-        />
+
+        <OSOnly os="mac">
+          <ol className="list-decimal list-inside space-y-2">
+            <li>Press <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border text-xs font-mono">Cmd</kbd> + <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border text-xs font-mono">Space</kbd> to open Spotlight</li>
+            <li>Type <strong>Terminal</strong></li>
+            <li>Press Enter</li>
+          </ol>
+          <p className="mt-2 text-sm text-muted">
+            You can also find it in Finder → Applications → Utilities → Terminal.
+          </p>
+        </OSOnly>
+
+        <OSOnly os="windows">
+          <ol className="list-decimal list-inside space-y-2">
+            <li>Press the <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border text-xs font-mono">Win</kbd> key on your keyboard</li>
+            <li>Type <strong>Terminal</strong> or <strong>PowerShell</strong></li>
+            <li>Click the app that appears</li>
+          </ol>
+          <p className="mt-2 text-sm text-muted">
+            On Windows 11 it&apos;s called &quot;Terminal.&quot; On Windows 10 look for &quot;Windows PowerShell.&quot;
+            Both work the same way for this tutorial.
+          </p>
+        </OSOnly>
+
+        <OSOnly os="linux">
+          <ol className="list-decimal list-inside space-y-2">
+            <li>Press <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border text-xs font-mono">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border text-xs font-mono">Alt</kbd> + <kbd className="px-1.5 py-0.5 bg-surface rounded border border-border text-xs font-mono">T</kbd></li>
+          </ol>
+          <p className="mt-2 text-sm text-muted">
+            On most Linux distributions this shortcut opens the default terminal. You can also find it
+            in your applications menu.
+          </p>
+        </OSOnly>
 
         <p className="mt-4">
           You should see a window that looks something like this:
         </p>
 
-        <FakeTerminal
-          command="echo 'Hello!'"
-          output="Hello!"
-          title="Your first terminal command"
-        />
+        <OSOnly os="mac">
+          <FakeTerminal
+            command="echo 'Hello!'"
+            output="Hello!"
+            title="Terminal — Mac"
+          />
+        </OSOnly>
+        <OSOnly os="windows">
+          <FakeTerminal
+            command="echo 'Hello!'"
+            output="Hello!"
+            title="PowerShell — Windows"
+          />
+        </OSOnly>
+        <OSOnly os="linux">
+          <FakeTerminal
+            command="echo 'Hello!'"
+            output="Hello!"
+            title="Terminal — Linux"
+          />
+        </OSOnly>
 
         <p>
           See the <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">$</code> sign? That&apos;s called the{" "}
@@ -103,14 +149,32 @@ export function AllSections() {
         </p>
 
         <StuckPanel>
-          <StuckItem
-            problem="I can't find Terminal on my Mac"
-            fix="Open Finder → Applications → Utilities → Terminal. Or press Cmd+Space and type 'Terminal'."
-          />
-          <StuckItem
-            problem="PowerShell looks different from the screenshots"
-            fix="That's fine! PowerShell and Command Prompt both work. Just type the same commands."
-          />
+          <OSOnly os="mac">
+            <StuckItem
+              problem="I can't find Terminal on my Mac"
+              fix="Open Finder → Applications → Utilities → Terminal. Or press Cmd+Space and type 'Terminal'."
+            />
+            <StuckItem
+              problem="Should I use Terminal or iTerm?"
+              fix="The built-in Terminal is perfectly fine. iTerm is a fancier alternative — both work the same way for this tutorial."
+            />
+          </OSOnly>
+          <OSOnly os="windows">
+            <StuckItem
+              problem="I only see 'Command Prompt', not 'Terminal'"
+              fix="Command Prompt works too! But if you want the newer Terminal app, you can install 'Windows Terminal' free from the Microsoft Store."
+            />
+            <StuckItem
+              problem="PowerShell looks different from the screenshots"
+              fix="That's fine! PowerShell and Terminal both work. Just type the same commands."
+            />
+          </OSOnly>
+          <OSOnly os="linux">
+            <StuckItem
+              problem="Ctrl+Alt+T doesn't work"
+              fix="Look for 'Terminal' in your applications menu (sometimes called 'Console' or 'Konsole' depending on your desktop environment)."
+            />
+          </OSOnly>
         </StuckPanel>
       </Section>
 
@@ -140,17 +204,44 @@ export function AllSections() {
             </a>
           </li>
           <li>Click the big download button (it detects your operating system automatically)</li>
-          <li>Open the downloaded file and follow the installer</li>
-          <li>Open VS Code to make sure it works</li>
+          <OSOnly os="mac">
+            <li>Open the downloaded <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">.zip</code> file — it will unzip into an app</li>
+            <li>Drag <strong>Visual Studio Code</strong> into your <strong>Applications</strong> folder</li>
+            <li>Open VS Code from Applications</li>
+          </OSOnly>
+          <OSOnly os="windows">
+            <li>Run the downloaded <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">.exe</code> installer</li>
+            <li>Click Next through the installer — check &quot;Add to PATH&quot; if it asks</li>
+            <li>Open VS Code from the Start menu</li>
+          </OSOnly>
+          <OSOnly os="linux">
+            <li>Download the <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">.deb</code> or <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">.rpm</code> package for your distro</li>
+            <li>Install it with your package manager or by double-clicking the file</li>
+            <li>Open VS Code from your applications menu</li>
+          </OSOnly>
         </ol>
 
-        <Illustration label="VS Code download page" caption="The download button is right on the homepage" />
+        <Illustration label="VS Code download page" caption="The download button is right on the homepage — it detects your OS" />
 
         <StuckPanel>
-          <StuckItem
-            problem="Mac says the app is from an unidentified developer"
-            fix="Right-click the app → Open → Click 'Open' in the dialog. You only need to do this once."
-          />
+          <OSOnly os="mac">
+            <StuckItem
+              problem="Mac says the app is from an unidentified developer"
+              fix="Right-click the app → Open → Click 'Open' in the dialog. You only need to do this once."
+            />
+          </OSOnly>
+          <OSOnly os="windows">
+            <StuckItem
+              problem="Windows SmartScreen blocks the installer"
+              fix="Click 'More info' → 'Run anyway'. VS Code is safe — this warning appears for many programs."
+            />
+          </OSOnly>
+          <OSOnly os="linux">
+            <StuckItem
+              problem="I can't install the .deb file"
+              fix="Open a terminal and run: sudo dpkg -i ~/Downloads/code_*.deb && sudo apt-get install -f"
+            />
+          </OSOnly>
         </StuckPanel>
       </Section>
 
@@ -166,19 +257,50 @@ export function AllSections() {
         </p>
 
         <h3 className="font-semibold text-lg mt-6 mb-2">Install it</h3>
-        <ol className="list-decimal list-inside space-y-2">
-          <li>
-            Go to{" "}
-            <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              nodejs.org
-            </a>
-          </li>
-          <li>Download the <strong>LTS</strong> version (the one that says &quot;Recommended for most users&quot;)</li>
-          <li>Run the installer — click Next/Continue through everything, use all the defaults</li>
-        </ol>
+
+        <OSOnly os="mac">
+          <ol className="list-decimal list-inside space-y-2">
+            <li>
+              Go to{" "}
+              <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+                nodejs.org
+              </a>
+            </li>
+            <li>Download the <strong>LTS</strong> version (the button that says &quot;Recommended for most users&quot;)</li>
+            <li>Open the downloaded <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">.pkg</code> file</li>
+            <li>Click Continue through the installer — use all the defaults</li>
+          </ol>
+        </OSOnly>
+
+        <OSOnly os="windows">
+          <ol className="list-decimal list-inside space-y-2">
+            <li>
+              Go to{" "}
+              <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+                nodejs.org
+              </a>
+            </li>
+            <li>Download the <strong>LTS</strong> version (the button that says &quot;Recommended for most users&quot;)</li>
+            <li>Run the downloaded <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">.msi</code> installer</li>
+            <li>Click Next through everything — use all the defaults</li>
+            <li>If it asks to install &quot;Tools for Native Modules,&quot; check the box and click Next</li>
+          </ol>
+        </OSOnly>
+
+        <OSOnly os="linux">
+          <p>The easiest way on Linux is through your package manager:</p>
+          <CommandBlock command="curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs" title="Ubuntu / Debian" />
+          <p className="text-sm text-muted mt-2">
+            On Fedora/RHEL use <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">dnf</code> instead. Or download the installer from{" "}
+            <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">nodejs.org</a>.
+          </p>
+        </OSOnly>
 
         <h3 className="font-semibold text-lg mt-6 mb-2">Verify it worked</h3>
-        <p>Open your terminal and type:</p>
+        <p>
+          <OSOnly os="windows">Close your terminal, open a new one, then type:</OSOnly>
+          <OSOnly os={["mac", "linux"]}>Open your terminal and type:</OSOnly>
+        </p>
         <CommandBlock command="node -v" />
         <p>You should see a version number like <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">v22.x.x</code>. If you do, it worked!</p>
 
@@ -194,10 +316,28 @@ export function AllSections() {
         <CommandBlock command="npm -v" />
 
         <StuckPanel>
-          <StuckItem
-            problem="'node' is not recognized as a command"
-            fix="Close your terminal completely and open a new one. The terminal needs to restart to see new programs."
-          />
+          <OSOnly os="mac">
+            <StuckItem
+              problem="'node' is not recognized as a command"
+              fix="Close your terminal completely and open a new one. The terminal needs to restart to see new programs."
+            />
+          </OSOnly>
+          <OSOnly os="windows">
+            <StuckItem
+              problem="'node' is not recognized as a command"
+              fix="Close your terminal completely and open a new one. If that doesn't work, restart your computer — Windows sometimes needs a restart after installing Node."
+            />
+            <StuckItem
+              problem="The installer asks about Chocolatey"
+              fix="Just click Next. You don't need Chocolatey for this tutorial."
+            />
+          </OSOnly>
+          <OSOnly os="linux">
+            <StuckItem
+              problem="'node' is not recognized as a command"
+              fix="Close and reopen your terminal. If you used a package manager, make sure the install finished without errors."
+            />
+          </OSOnly>
           <StuckItem
             problem="I see an old version like v16 or v18"
             fix="That's probably fine! Mastra Code works with Node 18+. But if you want the latest, re-download from nodejs.org."
@@ -217,41 +357,66 @@ export function AllSections() {
           deploy your website later.
         </p>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Mac</h3>
-        <p>Open your terminal and type:</p>
-        <CommandBlock command={{ mac: "git --version" }} />
-        <p>
-          If Git is already installed, you&apos;ll see a version number. If not, your Mac will automatically
-          offer to install it for you — just click &quot;Install&quot; and follow the prompts.
-        </p>
+        <h3 className="font-semibold text-lg mt-6 mb-2">Install it</h3>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Windows</h3>
-        <ol className="list-decimal list-inside space-y-2">
-          <li>
-            Go to{" "}
-            <a href="https://git-scm.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              git-scm.com
-            </a>
-          </li>
-          <li>Download the installer for Windows</li>
-          <li>Run the installer — use all the default options (just keep clicking Next)</li>
-          <li>Close and reopen your terminal</li>
-        </ol>
+        <OSOnly os="mac">
+          <p>Open your terminal and type:</p>
+          <CommandBlock command="git --version" />
+          <p>
+            If Git is already installed, you&apos;ll see a version number and you&apos;re done! If not,
+            your Mac will automatically pop up a dialog offering to install it — just click
+            &quot;Install&quot; and follow the prompts.
+          </p>
+          <Illustration label="Xcode Command Line Tools dialog" caption="If Git isn't installed, your Mac will show this dialog — just click Install" />
+        </OSOnly>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Verify</h3>
+        <OSOnly os="windows">
+          <ol className="list-decimal list-inside space-y-2">
+            <li>
+              Go to{" "}
+              <a href="https://git-scm.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+                git-scm.com
+              </a>
+            </li>
+            <li>Click the big &quot;Download for Windows&quot; button</li>
+            <li>Run the installer — use all the default options (just keep clicking Next)</li>
+            <li><strong>Important:</strong> Close your terminal and open a new one after installing</li>
+          </ol>
+        </OSOnly>
+
+        <OSOnly os="linux">
+          <p>Most Linux distros have Git available through the package manager:</p>
+          <CommandBlock command="sudo apt install git" title="Ubuntu / Debian" />
+          <p className="text-sm text-muted mt-2">
+            On Fedora use <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">sudo dnf install git</code>.
+            On Arch use <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">sudo pacman -S git</code>.
+          </p>
+        </OSOnly>
+
+        <h3 className="font-semibold text-lg mt-6 mb-2">Verify it worked</h3>
         <CommandBlock command="git --version" />
 
         <FakeTerminal command="git --version" output="git version 2.45.2" title="Checking Git version" />
 
         <StuckPanel>
-          <StuckItem
-            problem="Mac says I need to install Xcode Command Line Tools"
-            fix="Click 'Install' when prompted. This is normal — it installs Git along with some other developer tools."
-          />
-          <StuckItem
-            problem="'git' is not recognized on Windows"
-            fix="Make sure you close and reopen your terminal after installing Git. If it still doesn't work, restart your computer."
-          />
+          <OSOnly os="mac">
+            <StuckItem
+              problem="Mac says I need to install Xcode Command Line Tools"
+              fix="Click 'Install' when prompted. This is normal — it installs Git along with some other developer tools. It might take a few minutes."
+            />
+          </OSOnly>
+          <OSOnly os="windows">
+            <StuckItem
+              problem="'git' is not recognized"
+              fix="Make sure you close and reopen your terminal after installing Git. If it still doesn't work, restart your computer."
+            />
+          </OSOnly>
+          <OSOnly os="linux">
+            <StuckItem
+              problem="'Permission denied' when installing"
+              fix="Make sure you include 'sudo' at the start of the install command. It will ask for your password."
+            />
+          </OSOnly>
         </StuckPanel>
       </Section>
 
@@ -320,9 +485,8 @@ export function AllSections() {
               claude.com/pricing
             </a>
           </li>
-          <li>Click &quot;Get started&quot; on your chosen plan</li>
-          <li>Create an account with your email or Google</li>
-          <li>Enter payment info if you chose a paid plan</li>
+          <li>Create an account (email or Google sign-in)</li>
+          <li>Choose your plan</li>
         </ol>
 
         <div className="mt-4 p-4 rounded-lg bg-accent/5 border border-accent/20">
@@ -367,10 +531,18 @@ export function AllSections() {
         <CommandBlock command="mastracode --version" />
 
         <StuckPanel>
-          <StuckItem
-            problem="Permission denied / EACCES error"
-            fix="On Mac/Linux, try: sudo npm install -g mastracode (you'll need to enter your computer password)"
-          />
+          <OSOnly os={["mac", "linux"]}>
+            <StuckItem
+              problem="Permission denied / EACCES error"
+              fix="Try adding 'sudo' in front: sudo npm install -g mastracode — you'll need to enter your computer password."
+            />
+          </OSOnly>
+          <OSOnly os="windows">
+            <StuckItem
+              problem="Permission denied / EACCES error"
+              fix="Try opening your terminal as Administrator: right-click Terminal or PowerShell → 'Run as administrator' → then run the install command again."
+            />
+          </OSOnly>
           <StuckItem
             problem="'npm' is not recognized"
             fix="Go back to Step 4 and make sure Node.js is installed. Close and reopen your terminal after installing."
@@ -416,19 +588,27 @@ export function AllSections() {
         <p>Let&apos;s build something! Here&apos;s what to do:</p>
 
         <h3 className="font-semibold text-lg mt-6 mb-2">1. Create a project folder</h3>
-        <CommandBlock
-          command={{
-            mac: "mkdir my-first-website && cd my-first-website",
-            windows: "mkdir my-first-website && cd my-first-website",
-            linux: "mkdir my-first-website && cd my-first-website",
-          }}
-        />
-        <p className="text-sm text-muted">
-          <code className="bg-surface px-1 py-0.5 rounded font-mono">mkdir</code> = &quot;make
-          directory&quot; (creates a folder).{" "}
-          <code className="bg-surface px-1 py-0.5 rounded font-mono">cd</code> = &quot;change
-          directory&quot; (go into that folder).
-        </p>
+
+        <OSOnly os={["mac", "linux"]}>
+          <CommandBlock command="mkdir my-first-website && cd my-first-website" />
+          <p className="text-sm text-muted">
+            This creates a new folder called <code className="bg-surface px-1 py-0.5 rounded font-mono">my-first-website</code> on
+            your computer and moves into it.{" "}
+            <code className="bg-surface px-1 py-0.5 rounded font-mono">mkdir</code> = &quot;make directory&quot; (create a folder),{" "}
+            <code className="bg-surface px-1 py-0.5 rounded font-mono">cd</code> = &quot;change directory&quot; (go into it).
+          </p>
+        </OSOnly>
+
+        <OSOnly os="windows">
+          <CommandBlock command="mkdir my-first-website; cd my-first-website" />
+          <p className="text-sm text-muted">
+            This creates a new folder called <code className="bg-surface px-1 py-0.5 rounded font-mono">my-first-website</code> on
+            your computer and moves into it.{" "}
+            <code className="bg-surface px-1 py-0.5 rounded font-mono">mkdir</code> = &quot;make directory&quot; (create a folder),{" "}
+            <code className="bg-surface px-1 py-0.5 rounded font-mono">cd</code> = &quot;change directory&quot; (go into it).
+            In PowerShell we use <code className="bg-surface px-1 py-0.5 rounded font-mono">;</code> instead of <code className="bg-surface px-1 py-0.5 rounded font-mono">&&</code> to chain commands.
+          </p>
+        </OSOnly>
 
         <h3 className="font-semibold text-lg mt-6 mb-2">2. Start Mastra Code</h3>
         <CommandBlock command="mastracode" />
@@ -609,45 +789,60 @@ export function AllSections() {
           </Jargon>{" "}
           means putting your website on the internet so anyone can see it. We&apos;ll use{" "}
           <Jargon term="Vercel">
-            Vercel is a company that hosts websites for free. It reads your code from GitHub and
-            turns it into a live website with a real URL. It&apos;s how most Next.js websites get
-            deployed.
+            Vercel is a company that hosts websites for free. You connect your GitHub project to
+            Vercel, and it turns your code into a live website with a real URL. Every time you
+            update your code on GitHub, Vercel automatically updates the website too.
           </Jargon>{" "}
-          — it&apos;s free and takes about 2 minutes.
+          — it&apos;s free and works beautifully with the kind of projects Mastra Code creates.
         </p>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Steps</h3>
+        <h3 className="font-semibold text-lg mt-6 mb-2">1. Sign up for Vercel</h3>
         <ol className="list-decimal list-inside space-y-2">
           <li>
             Go to{" "}
+            <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
+              vercel.com
+            </a>
+          </li>
+          <li>Click &quot;Sign Up&quot;</li>
+          <li>Choose &quot;Continue with GitHub&quot; (this connects your accounts)</li>
+          <li>Authorize Vercel to access your GitHub</li>
+        </ol>
+
+        <Illustration label="Vercel signup — 'Continue with GitHub'" caption="Sign up with your GitHub account to connect them automatically" />
+
+        <h3 className="font-semibold text-lg mt-6 mb-2">2. Import your project</h3>
+        <ol className="list-decimal list-inside space-y-2">
+          <li>
+            After signing up, go to{" "}
             <a href="https://vercel.com/new" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               vercel.com/new
             </a>
           </li>
-          <li>Sign up with your GitHub account (click &quot;Continue with GitHub&quot;)</li>
-          <li>You&apos;ll see a list of your GitHub repositories — find your project and click &quot;Import&quot;</li>
-          <li>Leave all the settings as-is and click &quot;Deploy&quot;</li>
-          <li>Wait about 60 seconds...</li>
-          <li>🎉 Your website is live! Vercel will show you the URL.</li>
+          <li>You&apos;ll see your GitHub repositories — find <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">my-first-website</code></li>
+          <li>Click &quot;Import&quot;</li>
+          <li>Click &quot;Deploy&quot; (you don&apos;t need to change any settings)</li>
+          <li>Wait about 1-2 minutes...</li>
+          <li>🎉 Your website is live! Vercel gives you a URL like <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">my-first-website.vercel.app</code></li>
         </ol>
 
-        <Illustration label="Vercel import page" caption="Find your repo in the list, click Import, then Deploy" />
+        <Illustration label="Vercel deploy success screen" caption="After deploying, you'll see confetti and your live URL!" />
 
-        <div className="mt-4 p-4 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50">
-          <p className="text-sm text-green-800 dark:text-green-200">
-            <strong>🎉 Congratulations!</strong> You just deployed your first website. Share that URL
-            with anyone — they can see your site right now.
+        <div className="mt-4 p-4 rounded-lg bg-success/10 border border-success/30">
+          <p className="text-sm">
+            <strong>🎉 Congratulations!</strong> You just built and deployed a real website using AI — from zero.
+            Share the URL with anyone and they can see your site!
           </p>
         </div>
 
         <StuckPanel>
           <StuckItem
-            problem="I don't see my repository on Vercel"
-            fix="You might need to grant Vercel access to your GitHub repos. Click 'Adjust GitHub App Permissions' at the bottom of the import page."
+            problem="I don't see my repository in Vercel"
+            fix="Click 'Adjust GitHub App Permissions' in Vercel and make sure it has access to your repos."
           />
           <StuckItem
             problem="The deploy failed"
-            fix="Click on the deployment to see the error logs. Common fixes: make sure your project builds locally with 'npm run build' first."
+            fix="Go back to your Mastra Code session and say 'The Vercel deploy failed — here's the error: [paste error]'. It'll fix it for you."
           />
         </StuckPanel>
       </Section>
@@ -655,76 +850,64 @@ export function AllSections() {
       {/* Section 14 */}
       <Section id="now-what" number={14} title="Now what?">
         <p>
-          You did it! You went from zero to a deployed website. Here are some things to try next:
+          You&apos;ve got the whole setup working. Here are some ideas for what to do next:
         </p>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Ideas to try</h3>
-        <div className="space-y-2">
+        <h3 className="font-semibold text-lg mt-6 mb-2">Things to try</h3>
+        <ul className="list-disc list-inside space-y-2">
+          <li>
+            <strong>Modify your site:</strong> Go back to your project folder, run{" "}
+            <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">mastracode</code>, and tell it to change things.
+            &quot;Make the hero section taller and add an animation.&quot;
+          </li>
+          <li>
+            <strong>Build something new:</strong> Create a new folder, start Mastra Code in it, and try a different project.
+            A blog? A recipe site? A link-in-bio page?
+          </li>
+          <li>
+            <strong>Learn as you go:</strong> Look at the code Mastra Code writes. Ask it to explain things:
+            &quot;What does this CSS do?&quot; or &quot;Why did you use this component?&quot;
+          </li>
+        </ul>
+
+        <h3 className="font-semibold text-lg mt-6 mb-2">Helpful prompts</h3>
+        <div className="space-y-2 my-4">
           {[
-            "Add a blog section to my website",
-            "Make the design more modern with animations",
-            "Add a dark mode toggle",
-            "Create a page that shows the current weather",
-            "Add a gallery section with my photos",
-            "Make the site work better on mobile phones",
-          ].map((idea, i) => (
+            "Add a dark/light theme toggle to my site",
+            "Make this responsive so it looks good on phones",
+            "Add a blog section where I can write posts in Markdown",
+            "Help me set up a custom domain for my Vercel site",
+            "Add page transitions and animations",
+          ].map((prompt, i) => (
             <div key={i} className="flex items-start gap-2 p-3 bg-surface rounded border border-border">
               <span className="text-accent font-mono text-sm flex-shrink-0">&gt;</span>
-              <span className="text-sm">{idea}</span>
+              <span className="text-sm">{prompt}</span>
             </div>
           ))}
         </div>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Helpful tips</h3>
+        <h3 className="font-semibold text-lg mt-6 mb-2">Troubleshooting</h3>
         <ul className="list-disc list-inside space-y-2">
           <li>
-            <strong>Commit often.</strong> After each change you like, ask Mastra Code to &quot;commit my changes.&quot;
-            This saves a snapshot you can go back to.
+            <strong>Hit a usage limit?</strong> Wait for it to reset (usually 5 hours on Pro) or upgrade
+            your Claude plan.
           </li>
           <li>
-            <strong>Use Plan mode for big changes.</strong> If you want to restructure your site,
-            switch to Plan mode first and review what Mastra Code wants to do.
+            <strong>Something broke?</strong> Tell Mastra Code: &quot;Something broke. Here&apos;s the error: [paste error]&quot;
           </li>
           <li>
-            <strong>Don&apos;t edit code manually (yet).</strong> Let Mastra Code handle it. If something
-            looks wrong, describe the problem and ask it to fix it.
-          </li>
-          <li>
-            <strong>Push to GitHub after good changes.</strong> Ask Mastra Code to &quot;push to GitHub.&quot;
-            Vercel will automatically redeploy with your changes.
+            <strong>Want to start over?</strong> Create a new folder and start fresh. Your old project is
+            still safe on GitHub.
           </li>
         </ul>
 
-        <h3 className="font-semibold text-lg mt-6 mb-2">Helpful links</h3>
-        <ul className="list-disc list-inside space-y-2">
-          <li>
-            <a href="https://docs.mastra.ai/docs/mastra-code/overview" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              Mastra Code documentation
-            </a>
-          </li>
-          <li>
-            <a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              Claude pricing &amp; plans
-            </a>
-          </li>
-          <li>
-            <a href="https://nextjs.org/docs" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              Next.js docs
-            </a>{" "}
-            (the framework Mastra Code often uses)
-          </li>
-          <li>
-            <a href="https://vercel.com/docs" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-              Vercel docs
-            </a>
-          </li>
-        </ul>
-
-        <div className="mt-8 p-6 rounded-lg bg-accent/5 border border-accent/20 text-center">
-          <p className="text-lg font-bold mb-2">You&apos;re a web developer now. 🚀</p>
+        <div className="mt-6 p-6 rounded-xl bg-gradient-to-r from-accent/10 to-accent/5 border border-accent/20 text-center">
+          <p className="text-lg font-semibold mb-2">
+            You did it! 🎉
+          </p>
           <p className="text-muted">
-            Seriously — you just built and deployed a website. Most people never get this far.
-            Keep experimenting, keep building, and have fun!
+            You went from zero to deploying a website. That&apos;s a real accomplishment.
+            Now go build something cool.
           </p>
         </div>
       </Section>
