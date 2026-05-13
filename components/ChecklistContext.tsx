@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 
 const STORAGE_KEY = "mastracode-tutorial:progress";
-const TOTAL_STEPS = 14;
+const TOTAL_STEPS = 15;
 
 interface ChecklistContextType {
   completed: Set<string>;

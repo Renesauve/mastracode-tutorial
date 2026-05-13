@@ -22,7 +22,8 @@ export const sectionsMeta: SectionMeta[] = [
   { id: "modes", number: 11, title: "Plan mode vs Build mode" },
   { id: "save-to-github", number: 12, title: "Save your work to GitHub" },
   { id: "deploy", number: 13, title: "Deploy to Vercel" },
-  { id: "now-what", number: 14, title: "Now what?" },
+  { id: "advanced", number: 14, title: "Advanced tips" },
+  { id: "now-what", number: 15, title: "Now what?" },
 ];
 
 export function AllSections() {
@@ -777,6 +778,96 @@ export function AllSections() {
             fix="You might not be logged into GitHub from your terminal. Ask Mastra Code: 'Help me log in to GitHub from the terminal'."
           />
         </StuckPanel>
+
+        <h3 className="font-semibold text-lg mt-8 mb-2">3. Branches and pull requests (optional, but useful)</h3>
+        <p>
+          Right now all your work goes straight to{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">main</code> — the
+          default version of your project. That&apos;s fine while you&apos;re experimenting. But
+          once your site is live and you&apos;re making changes you care about, there&apos;s a
+          safer pattern that pros use: <strong>branches</strong> and{" "}
+          <strong>pull requests</strong>.
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">What&apos;s a branch?</h4>
+        <p>
+          A{" "}
+          <Jargon term="branch">
+            Think of your project as a tree. The trunk is called &quot;main&quot; — that&apos;s
+            the working version. A branch is a side path off the trunk where you can try things
+            out without affecting main. If your experiment works, you merge the branch back into
+            main. If it doesn&apos;t, you throw the branch away and main is untouched.
+          </Jargon>{" "}
+          is a parallel copy of your project where you can try changes without touching the main
+          version. If the changes work out, you keep them. If they don&apos;t, you throw the
+          branch away — your main version stays exactly how it was.
+        </p>
+        <p>
+          You don&apos;t have to remember any git commands. Just ask Mastra Code:
+        </p>
+        <div className="p-4 bg-surface rounded-lg border border-border my-4">
+          <p className="font-mono text-sm">
+            &gt; Make a new branch called &lsquo;add-contact-form&rsquo; and switch to it
+          </p>
+        </div>
+        <p>
+          Now any changes you make happen on that branch only. Your{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">main</code> branch is
+          frozen in its working state.
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">What&apos;s a pull request?</h4>
+        <p>
+          A{" "}
+          <Jargon term="pull request">
+            A pull request (PR for short) is a proposal to merge your branch back into main.
+            It&apos;s how teams review code before it goes live. Even when you&apos;re working
+            alone, PRs are useful because they show you a clear before/after summary of every
+            change, and they give Vercel a chance to deploy a preview URL so you can see your
+            changes live before merging.
+          </Jargon>{" "}
+          (or PR) is a proposal to merge your branch into{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">main</code>. On
+          GitHub, it shows you exactly what changed, line by line. Even working solo, PRs are
+          handy because Vercel will automatically build a <strong>preview deployment</strong> for
+          every PR — a live URL where you can see your changes on the real internet before they
+          go to your main site.
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">The whole flow in plain English</h4>
+        <p>Once you&apos;re on a branch and happy with your changes, just say:</p>
+        <div className="p-4 bg-surface rounded-lg border border-border my-4">
+          <p className="font-mono text-sm">
+            &gt; Push this branch to GitHub and open a pull request
+          </p>
+        </div>
+        <p>
+          Mastra Code will push the branch, then either open the PR for you (if you have the{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">gh</code> CLI
+          installed) or give you a link to open it on GitHub.com with one click. You review the
+          changes, click &quot;Merge pull request,&quot; and your work is now part of{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">main</code>.
+        </p>
+
+        <div className="mt-4 p-4 rounded-lg bg-accent/5 border border-accent/20">
+          <p className="text-sm">
+            <strong>💡 When to bother:</strong> For tiny tweaks, just commit to main like before.
+            For anything bigger — a new section, a redesign, anything you&apos;re not sure
+            about — use a branch and PR. It costs nothing and saves you from breaking your
+            working site.
+          </p>
+        </div>
+
+        <StuckPanel>
+          <StuckItem
+            problem="I made changes on the wrong branch"
+            fix="Tell Mastra Code: 'I made changes on main but they should be on a new branch — move them.' It'll handle the git gymnastics."
+          />
+          <StuckItem
+            problem="My PR shows merge conflicts"
+            fix="Paste the conflict message into Mastra Code: 'My PR has merge conflicts, here's what GitHub says: [paste].' It'll walk you through resolving them."
+          />
+        </StuckPanel>
       </Section>
 
       {/* Section 13 */}
@@ -848,7 +939,182 @@ export function AllSections() {
       </Section>
 
       {/* Section 14 */}
-      <Section id="now-what" number={14} title="Now what?">
+      <Section id="advanced" number={14} title="Advanced tips">
+        <p>
+          You&apos;ve built and deployed a site — you don&apos;t need any of this to keep going.
+          But these are the features that make Mastra Code feel less like a tool and more like a
+          teammate that already knows your project. Skim, pick what looks useful, skip the rest.
+        </p>
+
+        <h3 className="font-semibold text-lg mt-6 mb-2">Auto memory: it remembers what you teach it</h3>
+        <p>
+          By default, Mastra Code quietly takes notes about your project as it works — your build
+          commands, conventions you&apos;ve corrected it on, quirks of your setup — and reads those
+          notes back at the start of every new session. So the next time you open it, it already knows.
+        </p>
+        <p>
+          This feature is called{" "}
+          <Jargon term="auto memory">
+            Also called &quot;observational memory&quot; or just &quot;persistent memory&quot; in some
+            docs — they&apos;re all the same thing. Mastra Code decides on its own what&apos;s worth
+            saving (it doesn&apos;t save something every session), and loads those notes automatically
+            when you start a new conversation.
+          </Jargon>
+          . It&apos;s on by default, but here&apos;s how to check, tweak it, and use it on purpose.
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">Check it&apos;s on</h4>
+        <p>
+          Auto memory needs Mastra Code version 2.1.59 or newer. Check yours:
+        </p>
+        <CommandBlock command="mastracode --version" />
+        <p>
+          Then, inside a Mastra Code session, run:
+        </p>
+        <CommandBlock command="/memory" />
+        <p>
+          You&apos;ll see what it currently remembers and a toggle to turn auto memory on or off.
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">Where the notes live</h4>
+        <p>
+          Auto memory is stored as plain text files on your computer, here:
+        </p>
+        <CommandBlock command="~/.claude/projects/<your-project>/memory/" />
+        <p>
+          Nothing leaves your machine. You can open these files in your code editor, read them,
+          or delete them if it remembered something you&apos;d rather it forget. Each project gets
+          its own folder.
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">Teach it something on purpose</h4>
+        <p>
+          You don&apos;t have to edit anything. Just tell Mastra Code, in plain English, what you
+          want it to remember:
+        </p>
+        <div className="space-y-2 my-4">
+          {[
+            "Remember that I always want Tailwind, not plain CSS",
+            "Remember that my deploy command is npm run deploy",
+            "Remember that I prefer dark themes for everything",
+          ].map((prompt, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 bg-surface rounded border border-border">
+              <span className="text-accent font-mono text-sm flex-shrink-0">&gt;</span>
+              <span className="text-sm">{prompt}</span>
+            </div>
+          ))}
+        </div>
+        <p>
+          It decides whether it&apos;s worth saving. Most of the time, things you say
+          &quot;remember&quot; about will stick.
+        </p>
+
+        <StuckPanel>
+          <StuckItem
+            problem="I don't see a /memory command"
+            fix="Run mastracode --version. If it's older than 2.1.59, upgrade by re-running the install command from Step 8. If your version is recent, auto memory may be disabled — start a session, type /memory, and flip the toggle on."
+          />
+          <StuckItem
+            problem="It remembered something wrong"
+            fix="Just tell it: 'Forget what you remembered about X.' Or open ~/.claude/projects/<your-project>/memory/ in your code editor and delete the file. It's only plain text."
+          />
+        </StuckPanel>
+
+        <h3 className="font-semibold text-lg mt-8 mb-2">AGENTS.md: tell it about your project once</h3>
+        <p>
+          There&apos;s a second kind of memory that&apos;s a little different. You create a file called{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">AGENTS.md</code> in
+          your project folder, write whatever you want Mastra Code to always know, and it reads
+          that file at the start of every session.
+        </p>
+        <p>
+          The difference from auto memory:
+        </p>
+        <ul className="list-disc list-inside space-y-2">
+          <li>
+            <strong>Auto memory</strong> = stuff Mastra Code figures out on its own. Lives on your
+            computer only.
+          </li>
+          <li>
+            <strong>AGENTS.md</strong> = stuff <em>you</em> write down on purpose. Gets saved to
+            GitHub with your project, so anyone (or any other AI tool) working on it sees the same
+            instructions.
+          </li>
+        </ul>
+        <p>
+          Use AGENTS.md for things like &quot;this project uses Next.js 15&quot;, &quot;always run
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono mx-1">npm run lint</code>
+          after changes&quot;, or &quot;the API key lives in .env.local, never commit it.&quot;
+        </p>
+
+        <h4 className="font-semibold mt-4 mb-2">The easiest way to make one</h4>
+        <p>Just ask Mastra Code:</p>
+        <div className="p-3 bg-surface rounded border border-border my-2">
+          <span className="text-accent font-mono text-sm">&gt;</span>{" "}
+          <span className="text-sm">Set up an AGENTS.md for this project</span>
+        </div>
+        <p>
+          Or run the built-in command inside a session, which does the same thing:
+        </p>
+        <CommandBlock command="/init" />
+        <p className="text-sm text-muted">
+          Note: you might also see this file called{" "}
+          <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">CLAUDE.md</code> in
+          some docs. They&apos;re the same idea, and both work.
+        </p>
+
+        <h3 className="font-semibold text-lg mt-8 mb-2">More slash commands worth knowing</h3>
+        <ul className="list-disc list-inside space-y-2">
+          <li>
+            <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">/memory</code> —
+            View and edit what Mastra Code remembers about this project.
+          </li>
+          <li>
+            <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">/init</code> —
+            Generate an AGENTS.md for the current project automatically.
+          </li>
+          <li>
+            <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">/clear</code> —
+            Start a fresh conversation. Useful when the chat has gotten long or you feel like Mastra
+            Code is &quot;stuck&quot; on an earlier idea.
+          </li>
+          <li>
+            <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">/help</code> —
+            List every available command.
+          </li>
+        </ul>
+
+        <h3 className="font-semibold text-lg mt-8 mb-2">Protect yourself from bad changes</h3>
+        <p>
+          Now that you have a real project, here&apos;s a habit that&apos;ll save you a lot of
+          headaches: before asking Mastra Code for a big or risky change, make sure your current
+          working version is saved somewhere safe. Two easy ways:
+        </p>
+        <ul className="list-disc list-inside space-y-2">
+          <li>
+            <strong>Commit first.</strong> Ask Mastra Code: &quot;Commit and push my current work
+            to GitHub before we start.&quot; If the next change goes sideways, you can always go
+            back to the version on GitHub.
+          </li>
+          <li>
+            <strong>Use a branch and PR.</strong> See Step 12 — for anything bigger than a tweak,
+            ask Mastra Code to make a new branch first, then open a pull request when
+            you&apos;re happy. If the change goes wrong, you switch back to{" "}
+            <code className="px-1 py-0.5 bg-surface rounded text-sm font-mono">main</code> and
+            your working site is untouched. Bonus: Vercel gives every PR its own preview URL so
+            you can test changes live before merging.
+          </li>
+        </ul>
+        <div className="mt-4 p-4 rounded-lg bg-accent/5 border border-accent/20">
+          <p className="text-sm">
+            <strong>💡 Tip:</strong> You don&apos;t have to remember the git commands. Just describe
+            what you want in plain English and Mastra Code will figure out the right commands to run.
+          </p>
+        </div>
+      </Section>
+
+      {/* Section 15 */}
+      <Section id="now-what" number={15} title="Now what?">
         <p>
           You&apos;ve got the whole setup working. Here are some ideas for what to do next:
         </p>
